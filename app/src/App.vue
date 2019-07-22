@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <MainMenu/>
+    <app-menu/>
     <v-content>
       <v-container fluid fill-height>
         <v-layout>
@@ -15,10 +15,11 @@
 </template>
 
 <script>
-  import MainMenu from './components/MainMenu'
+  import Menu from '@/components/Menu';
+
   export default {
     components: {
-      MainMenu,
+      'app-menu': Menu,
     },
     data: () => ({
       drawer: true

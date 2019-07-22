@@ -12,8 +12,12 @@ class ApiService {
 		});
 	}
 
-	test() {
-		return this.axios.get('/test');
+	users() {
+		return this.axios.get('/users');
+	}
+
+	user(id) {
+		return this.axios.get('/users/' + id);
 	}
 }
 

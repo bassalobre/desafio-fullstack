@@ -23,6 +23,10 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 
-Route::middleware('api')->get('/test', function (Request $request) {
-    return 'Test BS2';
+Route::middleware('api')->get('/users', function (Request $request) {
+    return response()->json([]);
+});
+
+Route::middleware('api')->get('/users/{id}', function (Request $request) {
+    return response()->json(['id' => $request->input('id')]);
 });
