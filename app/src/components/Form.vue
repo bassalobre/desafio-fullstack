@@ -74,7 +74,7 @@
 </template>
 <script>
     import { validationMixin } from 'vuelidate';
-    import { required, maxLength, email, numeric } from 'vuelidate/lib/validators';
+    import { required, minLength, maxLength, email, numeric } from 'vuelidate/lib/validators';
     import ViaCepService from '@/services/ViaCepService.js';
 
     export default {
@@ -94,7 +94,7 @@
                     comp: { maxLength: maxLength(20) },
                 },
             },
-            cep: { required, maxLength: maxLength(8), numeric },
+            cep: { required, maxLength: maxLength(8), minLength: minLength(8), numeric },
         },
         data: () => ({
             disableButton: false,
@@ -128,7 +128,8 @@
                 if (!this.$v.cep.$dirty) return errors;
                 !this.$v.cep.required && errors.push('CEP é obrigatório.');
                 !this.$v.cep.numeric && errors.push('CEP deve ser do tipo numérico.');
-                !this.$v.cep.maxLength && errors.push('CEP pode ter no maximo 8 caracteres.');
+                !this.$v.cep.maxLength && errors.push('CEP deve ter no maximo 8 caracteres.');
+                !this.$v.cep.minLength && errors.push('CEP deve ter no mínimo 8 caracteres.');
                 return errors;
             },
             streetErrors() {
@@ -169,16 +170,19 @@
                 this.disableButton = false
             },
             getAddress() {
-                console.log(this.cep);
-                ViaCepService
-                    .address(this.cep)
-                    .then(response => {
-                        const address = response.data;
-                        this.user.address = {
-                            street: address.logradouro,
-                            comp: address.complemento,
-                        }
-                    })
+                this.$v.$touch();
+                if (this.cepErrors.length === 0) {
+                    ViaCepService
+                        .address(this.cep)
+                        .then(response => {
+                            const address = response.data;
+                            this.user.address = {
+                                cep: address.cep,
+                                street: address.logradouro,
+                                comp: address.complemento,
+                            }
+                        })
+                }
             },
         },
     }
