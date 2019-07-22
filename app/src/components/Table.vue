@@ -13,8 +13,8 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.name }}</td>
                 <td class="text-xs-left">{{ props.item.email }}</td>
-                <td class="text-xs-left">{{ props.item.age }}</td>
-                <td class="text-xs-left">{{ props.item.cep }}</td>
+                <td class="text-xs-left">{{ props.item.birthDate | dateFilter }}</td>
+                <td class="text-xs-left">{{ props.item.address.cep | cepFilter }}</td>
 
                 <td class="text-xs-left">
                     <v-tooltip top>
@@ -38,7 +38,7 @@
                                     v-on="on"
                                     small
                                     class="mr-2"
-                                    @click="delete(props.item)"
+                                    @click="destroy(props.item)"
                             >
                                 delete_forever
                             </v-icon>
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     props: {
         users: Array,
@@ -73,12 +75,20 @@ export default {
         headers: [
             { width: 500, align: 'left', text: 'Nome', value: 'name' },
             { width: 500, align: 'left', text: 'E-mail', value: 'email' },
-            { width: 100, align: 'left', text: 'Idade', value: 'age' },
-            { width: 250, align: 'left', text: 'CEP', value: 'cep' },
+            { width: 100, align: 'left', text: 'Data de Nascimento', value: 'birthDate' },
+            { width: 250, align: 'left', text: 'CEP', value: 'address.cep' },
             { width: 50, align: 'left', text: '', value: 'id' },
             { width: 50, align: 'left', text: '', value: 'id' },
         ],
     }),
+    filters: {
+        cepFilter(value) {
+            return value.toString().replace(/^(\d{5})(\d{3}).*/,"$1-$2");
+        },
+        dateFilter(value) {
+            return moment(value).format('DD/MM/Y');
+        },
+    },
     methods: {
         create() {
             this.$router.push({name: 'CreateUser'});
@@ -86,7 +96,7 @@ export default {
         edit(item) {
             this.$router.push({name: 'EditUser', params: { id: item.id}});
         },
-        delete(item) {
+        destroy(item) {
             console.log(item);
         },
     },

@@ -11,7 +11,7 @@
                             :error-messages="nameErrors"
                     ></v-text-field>
                 </v-flex>
-                <v-flex xs12 md6 mr-2>
+                <v-flex xs12 md5 mr-2>
                     <v-text-field
                             v-model="user.email"
                             label="E-mail"
@@ -20,13 +20,13 @@
                             :error-messages="emailErrors"
                     ></v-text-field>
                 </v-flex>
-                <v-flex xs12 md1 mr-2>
+                <v-flex xs12 md2 mr-2>
                     <v-text-field
-                            v-model="user.age"
-                            type="number"
-                            label="Idade"
+                            v-model="user.birthDate"
+                            type="date"
+                            label="Data de Nascimento"
                             required
-                            :error-messages="ageErrors"
+                            :error-messages="birthDateErrors"
                     ></v-text-field>
                 </v-flex>
             </v-layout>
@@ -42,7 +42,36 @@
                             @blur="getAddress"
                     ></v-text-field>
                 </v-flex>
-                <v-flex xs12 md6 mr-2>
+                <v-flex xs12 md4 mr-2>
+                    <v-text-field
+                            v-model="user.address.city"
+                            label="Cidade"
+                            :counter="60"
+                            required
+                            :error-messages="cityErrors"
+                    ></v-text-field>
+                </v-flex>
+                <v-flex xs12 md1 mr-2>
+                    <v-text-field
+                            v-model="user.address.state"
+                            label="UF"
+                            :counter="2"
+                            required
+                            :error-messages="stateErrors"
+                    ></v-text-field>
+                </v-flex>
+                <v-flex xs12 md5 mr-2>
+                    <v-text-field
+                            v-model="user.address.neighborhood"
+                            label="Bairro"
+                            :counter="120"
+                            required
+                            :error-messages="neighborhoodErrors"
+                    ></v-text-field>
+                </v-flex>
+            </v-layout>
+            <v-layout>
+                <v-flex xs12 md7 mr-2>
                     <v-text-field
                             v-model="user.address.street"
                             label="Logradouro"
@@ -59,7 +88,7 @@
                             :error-messages="numberErrors"
                     ></v-text-field>
                 </v-flex>
-                <v-flex xs12 md3 mr-2>
+                <v-flex xs12 md4 mr-2>
                     <v-text-field
                             v-model="user.address.comp"
                             label="Complemento"
@@ -87,8 +116,11 @@
             user: {
                 name: { required, maxLength: maxLength(35) },
                 email: { required, email, maxLength: maxLength(35) },
-                age: { required, numeric },
+                birthDate: { required },
                 address: {
+                    city: { required, maxLength: maxLength(60) },
+                    state: { required, maxLength: maxLength(2) },
+                    neighborhood: { required, maxLength: maxLength(120) },
                     street: { required, maxLength: maxLength(120)},
                     number: { required },
                     comp: { maxLength: maxLength(20) },
@@ -96,10 +128,12 @@
             },
             cep: { required, maxLength: maxLength(8), minLength: minLength(8), numeric },
         },
-        data: () => ({
-            disableButton: false,
-            cep: '',
-        }),
+        data() {
+            return {
+                disableButton: false,
+                cep: '',
+            };
+        },
         computed: {
             nameErrors() {
                 const errors = [];
@@ -116,11 +150,10 @@
                 !this.$v.user.email.email && errors.push('E-mail deve ser um e-mail válido.')
                 return errors;
             },
-            ageErrors() {
+            birthDateErrors() {
                 const errors = [];
-                if (!this.$v.user.age.$dirty) return errors;
-                !this.$v.user.age.required && errors.push('Idade é obrigatório.');
-                !this.$v.user.age.numeric && errors.push('Idade deve ser do tipo numérico.');
+                if (!this.$v.user.birthDate.$dirty) return errors;
+                !this.$v.user.birthDate.required && errors.push('Idade é obrigatório.');
                 return errors;
             },
             cepErrors() {
@@ -130,6 +163,27 @@
                 !this.$v.cep.numeric && errors.push('CEP deve ser do tipo numérico.');
                 !this.$v.cep.maxLength && errors.push('CEP deve ter no maximo 8 caracteres.');
                 !this.$v.cep.minLength && errors.push('CEP deve ter no mínimo 8 caracteres.');
+                return errors;
+            },
+            cityErrors() {
+                const errors = [];
+                if (!this.$v.user.address.city.$dirty) return errors;
+                !this.$v.user.address.city.required && errors.push('Cidade é obrigatório.');
+                !this.$v.user.address.city.maxLength && errors.push('Cidade pode ter no maximo 60 caracteres.');
+                return errors;
+            },
+            stateErrors() {
+                const errors = [];
+                if (!this.$v.user.address.state.$dirty) return errors;
+                !this.$v.user.address.state.required && errors.push('UF é obrigatório.');
+                !this.$v.user.address.state.maxLength && errors.push('UF pode ter no maximo 2 caracteres.');
+                return errors;
+            },
+            neighborhoodErrors() {
+                const errors = [];
+                if (!this.$v.user.address.neighborhood.$dirty) return errors;
+                !this.$v.user.address.neighborhood.required && errors.push('Bairro é obrigatório.');
+                !this.$v.user.address.neighborhood.maxLength && errors.push('Bairro pode ter no maximo 120 caracteres.');
                 return errors;
             },
             streetErrors() {
@@ -175,14 +229,22 @@
                     ViaCepService
                         .address(this.cep)
                         .then(response => {
-                            const address = response.data;
-                            this.user.address = {
-                                cep: address.cep,
-                                street: address.logradouro,
-                                comp: address.complemento,
-                            }
+                            this.setAddress(response.data);
                         })
                 }
+            },
+            setAddress(address) {
+                this.user.address.cep = address.cep;
+                this.user.address.city = address.localidade;
+                this.user.address.state = address.uf;
+                this.user.address.neighborhood = address.bairro;
+                this.user.address.street = address.logradouro;
+                this.user.address.comp = address.complemento;
+            },
+        },
+        watch: {
+            'user.address.cep'(newValue) {
+                this.cep = newValue.toString().replace('-', '');
             },
         },
     }
