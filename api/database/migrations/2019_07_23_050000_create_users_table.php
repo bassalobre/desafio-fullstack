@@ -17,10 +17,17 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->date('birthDate');
+            $table->string('father_name')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->unsignedBigInteger('address_id');
+
+            $table->foreign('address_id')->references('id')->on('addresses');
+
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

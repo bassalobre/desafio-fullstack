@@ -1,12 +1,12 @@
 <template>
     <v-container class="pt-0">
-        <v-btn color="info right" @click="create()">Cadastrar Usuário</v-btn>
+        <v-btn color="green white--text" class="right" @click="create()">Cadastrar Usuário</v-btn>
         <v-data-table
             :headers="headers"
             :items="users"
             :rows-per-page-items="rowsPerPage"
             class="elevation-1"
-            item-key="created_at"
+            item-key="id"
             rows-per-page-text="Itens por página"
             :pagination.sync="pagination"
         >

@@ -1,14 +1,11 @@
-const axios = require('axios');
+import Service from './Service';
 
-class ViaCepService {
+class ViaCepService extends Service {
     constructor () {
-        this.axios = axios.create({
-            baseURL: 'https://viacep.com.br/ws/',
-            timeout: 60000,
-        });
+        super('https://viacep.com.br/ws/');
     }
 
-    address(cep) {
+    addressByCep(cep) {
         return this.axios.get(cep + '/json');
     }
 }

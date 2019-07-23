@@ -6,7 +6,7 @@
 
 <script>
 import Table from '@/components/Table';
-import ApiService from '@/services/ApiService.js';
+import UserService from '@/services/UserService';
 
 export default {
   components: {
@@ -16,10 +16,10 @@ export default {
       users: [],
   }),
   mounted() {
-    ApiService
-        .users()
+    UserService
+        .usersList()
         .then((response) => {
-            this.users = response.data;
+            this.users = response.data.data;
         });
   },
 }

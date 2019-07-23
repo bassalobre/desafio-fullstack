@@ -6,7 +6,7 @@
 
 <script>
     import Form from '@/components/Form';
-    import ApiService from '@/services/ApiService.js';
+    import UserService from '@/services/UserService';
 
     export default {
         components: {
@@ -14,7 +14,20 @@
         },
         data: () => ({
             user: {
-                address: {},
+                name: '',
+                email: '',
+                birthDate: null,
+                address: {
+                    cep: null,
+                    city: '',
+                    state: '',
+                    neighborhood: '',
+                    street: '',
+                    number: '',
+                    comp: '',
+                },
+                fatherName: '',
+                motherName: '',
             },
             isEdit: false,
         }),
@@ -28,8 +41,8 @@
         methods: {
             getUser(id) {
                 this.isEdit = true;
-                ApiService
-                    .user(id)
+                UserService
+                    .userById(id)
                     .then((response) => {
                         this.user = response.data;
                     });

@@ -1,110 +1,136 @@
 <template>
     <v-container class="pt-0">
-        <form class="mt-2">
-            <v-layout>
-                <v-flex xs12 md5 mr-2>
-                    <v-text-field
-                            v-model="user.name"
-                            label="Nome"
-                            :counter="35"
-                            required
-                            :error-messages="nameErrors"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md5 mr-2>
-                    <v-text-field
-                            v-model="user.email"
-                            label="E-mail"
-                            :counter="35"
-                            required
-                            :error-messages="emailErrors"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md2 mr-2>
-                    <v-text-field
-                            v-model="user.birthDate"
-                            type="date"
-                            label="Data de Nascimento"
-                            required
-                            :error-messages="birthDateErrors"
-                    ></v-text-field>
-                </v-flex>
-            </v-layout>
-            <v-layout>
-                <v-flex xs12 md2 mr-2>
-                    <v-text-field
-                            v-model="cep"
-                            label="CEP"
-                            :counter="8"
-                            type="number"
-                            required
-                            :error-messages="cepErrors"
-                            @blur="getAddress"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md4 mr-2>
-                    <v-text-field
-                            v-model="user.address.city"
-                            label="Cidade"
-                            :counter="60"
-                            required
-                            :error-messages="cityErrors"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md1 mr-2>
-                    <v-text-field
-                            v-model="user.address.state"
-                            label="UF"
-                            :counter="2"
-                            required
-                            :error-messages="stateErrors"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md5 mr-2>
-                    <v-text-field
-                            v-model="user.address.neighborhood"
-                            label="Bairro"
-                            :counter="120"
-                            required
-                            :error-messages="neighborhoodErrors"
-                    ></v-text-field>
-                </v-flex>
-            </v-layout>
-            <v-layout>
-                <v-flex xs12 md7 mr-2>
-                    <v-text-field
-                            v-model="user.address.street"
-                            label="Logradouro"
-                            :counter="120"
-                            required
-                            :error-messages="streetErrors"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md1 mr-2>
-                    <v-text-field
-                            v-model="user.address.number"
-                            label="Nº"
-                            required
-                            :error-messages="numberErrors"
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md4 mr-2>
-                    <v-text-field
-                            v-model="user.address.comp"
-                            label="Complemento"
-                            :counter="20"
-                            :error-messages="compErrors"
-                    ></v-text-field>
-                </v-flex>
-            </v-layout>
-            <v-btn class="right" @click="submit" color="green" dark :loading="disableButton">Salvar</v-btn>
-        </form>
+        <v-card>
+            <v-card-text>
+                <v-form class="mt-2" ref="form-user" @keyup.native.enter="submit">
+                    <v-layout>
+                        <v-flex xs12 md5 mr-2>
+                            <v-text-field
+                                    v-model="user.name"
+                                    label="Nome *"
+                                    :counter="35"
+                                    required
+                                    :error-messages="nameErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md5 mr-2>
+                            <v-text-field
+                                    v-model="user.email"
+                                    label="E-mail *"
+                                    :counter="35"
+                                    required
+                                    :error-messages="emailErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md2>
+                            <v-text-field
+                                    v-model="user.birthDate"
+                                    type="date"
+                                    label="Data de Nascimento *"
+                                    required
+                                    :error-messages="birthDateErrors"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12 md2 mr-2>
+                            <v-text-field
+                                    v-model="cep"
+                                    label="CEP *"
+                                    :counter="8"
+                                    type="number"
+                                    required
+                                    :error-messages="cepErrors"
+                                    @blur="getAddress"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4 mr-2>
+                            <v-text-field
+                                    v-model="user.address.city"
+                                    label="Cidade *"
+                                    :counter="60"
+                                    required
+                                    :error-messages="cityErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md1 mr-2>
+                            <v-text-field
+                                    v-model="user.address.state"
+                                    label="UF *"
+                                    :counter="2"
+                                    required
+                                    :error-messages="stateErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md5>
+                            <v-text-field
+                                    v-model="user.address.neighborhood"
+                                    label="Bairro *"
+                                    :counter="120"
+                                    required
+                                    :error-messages="neighborhoodErrors"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12 md7 mr-2>
+                            <v-text-field
+                                    v-model="user.address.street"
+                                    label="Logradouro *"
+                                    :counter="120"
+                                    required
+                                    :error-messages="streetErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md1 mr-2>
+                            <v-text-field
+                                    v-model="user.address.number"
+                                    label="Nº *"
+                                    required
+                                    :error-messages="numberErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md4>
+                            <v-text-field
+                                    v-model="user.address.comp"
+                                    label="Complemento"
+                                    :counter="20"
+                                    :error-messages="compErrors"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout>
+                        <v-flex xs12 md6 mr-2>
+                            <v-text-field
+                                    v-model="user.fatherName"
+                                    label="Nome do Pai"
+                                    :counter="35"
+                                    :error-messages="fatherNameErrors"
+                            ></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md6>
+                            <v-text-field
+                                    v-model="user.motherName"
+                                    label="Nome da Mãe"
+                                    :counter="35"
+                                    :error-messages="motherNameErrors"
+                            ></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                </v-form>
+                <span>* Campos obrigatórios</span>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn @click="submit" color="green" dark :loading="disableButton">Salvar</v-btn>
+            </v-card-actions>
+        </v-card>
     </v-container>
 </template>
 <script>
     import { validationMixin } from 'vuelidate';
     import { required, minLength, maxLength, email, numeric } from 'vuelidate/lib/validators';
-    import ViaCepService from '@/services/ViaCepService.js';
+    import ViaCepService from '@/services/ViaCepService';
 
     export default {
         mixins: [validationMixin],
@@ -125,15 +151,15 @@
                     number: { required },
                     comp: { maxLength: maxLength(20) },
                 },
+                fatherName: { maxLength: maxLength(35) },
+                motherName: { maxLength: maxLength(35) },
             },
             cep: { required, maxLength: maxLength(8), minLength: minLength(8), numeric },
         },
-        data() {
-            return {
-                disableButton: false,
-                cep: '',
-            };
-        },
+        data: () => ({
+            disableButton: false,
+            cep: '',
+        }),
         computed: {
             nameErrors() {
                 const errors = [];
@@ -205,16 +231,28 @@
                 !this.$v.user.address.comp.maxLength && errors.push('Complemento pode ter no maximo 20 caracteres.');
                 return errors;
             },
+            fatherNameErrors() {
+                const errors = [];
+                if (!this.$v.user.fatherName.$dirty) return errors;
+                !this.$v.user.fatherName.maxLength && errors.push('Nome do Pai pode ter no maximo 35 caracteres.');
+                return errors;
+            },
+            motherNameErrors() {
+                const errors = [];
+                if (!this.$v.user.motherName.$dirty) return errors;
+                !this.$v.user.motherName.maxLength && errors.push('Nome da Mãe pode ter no maximo 35 caracteres.');
+                return errors;
+            },
         },
         methods: {
-            submit () {
+            submit() {
                 this.$v.$touch();
                 if (! this.$v.$invalid) {
                     this.disableButton = true;
                     this.sendData();
                 }
             },
-            sendData () {
+            sendData() {
                 this.isEdit ? this.editUser() : this.createUser();
             },
             createUser() {
@@ -227,7 +265,7 @@
                 this.$v.$touch();
                 if (this.cepErrors.length === 0) {
                     ViaCepService
-                        .address(this.cep)
+                        .addressByCep(this.cep)
                         .then(response => {
                             this.setAddress(response.data);
                         })
