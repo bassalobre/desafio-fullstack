@@ -10,4 +10,4 @@ class ViaCepService extends Service {
     }
 }
 
-export default new ViaCepService();
+export default ViaCepService;

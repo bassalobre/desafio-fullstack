@@ -12,6 +12,18 @@ class UserService extends Service {
 	userById(id) {
 		return this.axios.get('/users/' + id);
 	}
+
+	editUser(user) {
+		return this.axios.put('/users/' + user.id, user);
+	}
+
+	createUser(user) {
+		return this.axios.post('/users', user);
+	}
+
+	destroyUser(id) {
+		return this.axios.delete('/users/' + id);
+	}
 }
 
-export default new UserService();
+export default UserService;

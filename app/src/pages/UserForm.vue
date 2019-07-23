@@ -40,8 +40,9 @@
         },
         methods: {
             getUser(id) {
+                const userService = new UserService();
                 this.isEdit = true;
-                UserService
+                userService
                     .userById(id)
                     .then((response) => {
                         this.user = response.data;

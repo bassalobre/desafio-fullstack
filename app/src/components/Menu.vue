@@ -49,9 +49,15 @@
     }),
     methods: {
       logout() {
-        AuthService
-          .logout()
-          .then(() => this.$router.push('/login'));
+        this
+          .$confirm('Tem certeza que deseja sair?')
+          .then(res => {
+            if (!res) return;
+
+            const authService = new AuthService();
+            authService.logout();
+            this.$router.push('/login');
+          });
       },
     },
   }

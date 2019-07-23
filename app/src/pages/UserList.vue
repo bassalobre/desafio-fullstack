@@ -7,6 +7,7 @@
 <script>
 import Table from '@/components/Table';
 import UserService from '@/services/UserService';
+import AuthService from '@/services/AuthService';
 
 export default {
   components: {
@@ -16,11 +17,22 @@ export default {
       users: [],
   }),
   mounted() {
-    UserService
+    const userService = new UserService();
+    userService
         .usersList()
         .then((response) => {
-            this.users = response.data.data;
+            this.users = response.data;
+        })
+        .catch(error => {
+            if (error.status === 401) this.unauthorized();
         });
+  },
+  methods: {
+      unauthorized() {
+          const authService = new AuthService();
+          authService.logout();
+          this.$router.push('/login');
+      },
   },
 }
 </script>

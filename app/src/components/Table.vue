@@ -38,7 +38,7 @@
                                     v-on="on"
                                     small
                                     class="mr-2"
-                                    @click="destroy(props.item)"
+                                    @click="destroy(props.item, props.index)"
                             >
                                 delete_forever
                             </v-icon>
@@ -61,6 +61,7 @@
 
 <script>
 import moment from 'moment';
+import UserService from '@/services/UserService';
 
 export default {
     props: {
@@ -96,8 +97,19 @@ export default {
         edit(item) {
             this.$router.push({name: 'EditUser', params: { id: item.id}});
         },
-        destroy(item) {
-            console.log(item);
+        destroy(item, index) {
+            this
+                .$confirm('Tem certeza que deseja excluir este Usuário?')
+                .then(res => {
+                    if (!res) return;
+
+                    const userService = new UserService();
+                    userService
+                        .destroyUser(item.id)
+                        .then(() => {
+                            this.users.splice(index, 1);
+                        });
+                })
         },
     },
 }

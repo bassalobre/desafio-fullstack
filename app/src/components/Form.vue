@@ -131,6 +131,7 @@
     import { validationMixin } from 'vuelidate';
     import { required, minLength, maxLength, email, numeric } from 'vuelidate/lib/validators';
     import ViaCepService from '@/services/ViaCepService';
+    import UserService from '@/services/UserService';
 
     export default {
         mixins: [validationMixin],
@@ -256,15 +257,32 @@
                 this.isEdit ? this.editUser() : this.createUser();
             },
             createUser() {
-                this.disableButton = false
+                const userService = new UserService();
+                this.user.address.cep = this.cep;
+                userService
+                    .createUser(this.user)
+                    .then(() => {
+                        this.disableButton = false;
+                        this.$router.push({name: 'Users'});
+                    })
+                    .catch(() => this.disableButton = false);
             },
             editUser() {
-                this.disableButton = false
+                const userService = new UserService();
+                this.user.address.cep = this.cep;
+                userService
+                    .editUser(this.user)
+                    .then(() => {
+                        this.disableButton = false;
+                        this.$router.push({name: 'Users'});
+                    })
+                    .catch(() => this.disableButton = false);
             },
             getAddress() {
                 this.$v.$touch();
                 if (this.cepErrors.length === 0) {
-                    ViaCepService
+                    const viaCepService = new ViaCepService();
+                    viaCepService
                         .addressByCep(this.cep)
                         .then(response => {
                             this.setAddress(response.data);

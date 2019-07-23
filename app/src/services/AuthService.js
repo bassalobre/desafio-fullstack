@@ -15,14 +15,13 @@ class AuthService extends Service {
     }
 
     logout() {
+        localStorage.removeItem('authorization');
+
         return this
             .axios
-            .post('/logout')
-            .then(() => {
-                localStorage.removeItem('authorization');
-            });
+            .post('/logout');
     }
 
 }
 
-export default new AuthService();
+export default AuthService;

@@ -70,8 +70,9 @@
             login() {
                 this.$v.$touch();
                 if (! this.$v.$invalid) {
+                    const authService = new AuthService();
                     this.loading = true;
-                    AuthService
+                    authService
                         .login({email: this.email, password: this.password})
                         .then(() => {
                             this.loading = false;
